@@ -273,8 +273,7 @@ class HTTPConnection(object):
             if content_type.startswith("application/x-www-form-urlencoded"):
                 arguments = parse_qs_bytes(native_str(self._request.body))
                 for name, values in arguments.iteritems():
-                    values = [v for v in values if v]
-                    if values:
+                    if values := [v for v in values if v]:
                         self._request.arguments.setdefault(name, []).extend(
                             values)
             elif content_type.startswith("multipart/form-data"):
@@ -402,8 +401,7 @@ class HTTPRequest(object):
         arguments = parse_qs_bytes(self.query)
         self.arguments = {}
         for name, values in arguments.iteritems():
-            values = [v for v in values if v]
-            if values:
+            if values := [v for v in values if v]:
                 self.arguments[name] = values
 
     def supports_http_1_1(self):
@@ -435,7 +433,7 @@ class HTTPRequest(object):
 
     def full_url(self):
         """Reconstructs the full URL for this request."""
-        return self.protocol + "://" + self.host + self.uri
+        return f"{self.protocol}://{self.host}{self.uri}"
 
     def request_time(self):
         """Returns the amount of time it took for this request to execute."""
@@ -470,8 +468,7 @@ class HTTPRequest(object):
         attrs = ("protocol", "host", "method", "uri", "version", "remote_ip",
                  "body")
         args = ", ".join(["%s=%r" % (n, getattr(self, n)) for n in attrs])
-        return "%s(%s, headers=%s)" % (
-            self.__class__.__name__, args, dict(self.headers))
+        return f"{self.__class__.__name__}({args}, headers={dict(self.headers)})"
 
     def _valid_ip(self, ip):
         try:

@@ -40,11 +40,8 @@ class PullRequest:
       (fname, ftype, fid) = iprot.readFieldBegin()
       if ftype == TType.STOP:
         break
-      if fid == 1:
-        if ftype == TType.STRING:
-          self.title = iprot.readString()
-        else:
-          iprot.skip(ftype)
+      if fid == 1 and ftype == TType.STRING:
+        self.title = iprot.readString()
       else:
         iprot.skip(ftype)
       iprot.readFieldEnd()
@@ -68,13 +65,12 @@ class PullRequest:
 
   def __hash__(self):
     value = 17
-    value = (value * 31) ^ hash(self.title)
-    return value
+    return (value * 31) ^ hash(self.title)
 
   def __repr__(self):
     L = ['%s=%r' % (key, value)
       for key, value in self.__dict__.iteritems()]
-    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+    return f"{self.__class__.__name__}({', '.join(L)})"
 
   def __eq__(self, other):
     return isinstance(other, self.__class__) and self.__dict__ == other.__dict__

@@ -31,12 +31,14 @@ def getSubdirectories(directory, filter = None):
 	directory = os.path.abspath(directory)
 	subdirectories = os.walk(directory).next()[1]
 	if filter is None:
-		return [directory + '/' + i for i in subdirectories]
+		return [f'{directory}/{i}' for i in subdirectories]
 	else:
-		return [directory + '/' + i for i in subdirectories if filter(directory + '/' + i)]
+		return [
+			f'{directory}/{i}' for i in subdirectories if filter(f'{directory}/{i}')
+		]
 
 def isGitDirectory(directory):
-	return os.path.isdir(directory + '/.git/')
+	return os.path.isdir(f'{directory}/.git/')
 
 def printDelimiter():
 	print '\033[91m'
